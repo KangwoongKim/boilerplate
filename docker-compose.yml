@@ -1,0 +1,45 @@
+name: ${APP_SLUG}
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: ${APP_SLUG}_postgres
+    env_file:
+      - ./.env
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    ports:
+      - "0.0.0.0:${POSTGRES_PORT}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  app:
+    build:
+      context: ./app
+      dockerfile: install/Dockerfile
+    container_name: ${APP_SLUG}_app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - ./.env
+      - ./app/.env.dev
+    environment:
+      DATABASE_HOST: postgres
+      PYTHONUNBUFFERED: "1"
+    ports:
+      - "0.0.0.0:${API_PORT}:8000"
+    volumes:
+      - ./app:/app
+      - ./.env:/project.env:ro
+    command: >
+      bash -c "python3 /app/install/generate_env.py &&
+               bash /app/start.sh"
+    restart: always
+
+volumes:
+  postgres_data:

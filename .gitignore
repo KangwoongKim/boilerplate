@@ -1,0 +1,36 @@
+# Environment & secrets
+.env
+app/.env.dev
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# Flutter / Dart
+app/mobile/.dart_tool/
+app/mobile/.flutter-plugins
+app/mobile/.flutter-plugins-dependencies
+app/mobile/.packages
+app/mobile/build/
+app/mobile/.pub-cache/
+app/mobile/.pub/
+
+# iOS / Android
+app/mobile/ios/Pods/
+app/mobile/ios/.symlinks/
+app/mobile/ios/Flutter/ephemeral/
+app/mobile/android/.gradle/
+app/mobile/android/local.properties
+app/mobile/android/app/debug/
+app/mobile/android/app/profile/
+app/mobile/android/app/release/
+
+# IDE & OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+*.swp
